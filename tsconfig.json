@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "lib": ["ES2015"],
+    "outDir": "./dist",
+    "strict": true
+  },
+  "include": ["*.ts"],
+  "exclude": ["*.spec.ts"]
+}
