@@ -35,6 +35,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption(null, "data-raw", true),
   new CurlOption(null, "data-urlencode", true),
   new CurlOption("f", "fail", false, "fail"),
+  new CurlOption("g", "globoff", false, "globoff"),
   new CurlOption("H", "header", true),
   new CurlOption("L", "location", true),
   new CurlOption("S", "show-error", false, "showError"),
@@ -54,6 +55,8 @@ interface CurlCommandFlags {
   compressedSsh?: boolean;
 
   fail?: boolean;
+
+  globoff?: boolean;
 
   showError?: boolean;
 
