@@ -1,4 +1,6 @@
-import { parse } from ".";
+// if we just import ".", typescript
+// uses the built version of our library. we want jest to use typescript code directly so we directly import module "./index"
+import { parse } from "./index";
 
 describe("curl parser", () => {
   it("should parse basic curl command", () => {
@@ -51,5 +53,16 @@ describe("curl parser", () => {
     expect(command.url).toBe("https://bun.sh/");
     expect(command.cookies).toBe("ph_phc=abc");
     expect(command.headers).toHaveLength(15);
+  });
+
+  /**
+   * Those are from the curl' manpage.
+   */
+  it("should parse multiple --data-urlencode options", () => {
+    const command = parse(
+      "curl --data-urlencode name=val --data-urlencode =encodethis --data-urlencode foo=bar https://example.com"
+    );
+
+    expect(command.body).toBe("name=val&encodethis=&foo=bar");
   });
 });

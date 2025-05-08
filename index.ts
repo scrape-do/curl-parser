@@ -178,9 +178,18 @@ export function parse(command: string): CurlCommand {
           case "data-ascii":
           case "data-binary":
           case "data-raw":
-          case "data-urlencode":
             result.body = arg;
             break;
+          case "data-urlencode": {
+            let formatted = arg.replace(/^=/, "");
+
+            if (!formatted.includes("=")) formatted += "=--";
+
+            result.body =
+              result.body === null ? formatted : `${result.body}&${formatted}`;
+
+            break;
+          }
 
           // parse header argument value
           case "header": {

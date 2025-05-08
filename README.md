@@ -22,4 +22,18 @@ const command = parse(
 console.log("serialized:", stringify(command));
 ```
 
-**NOT** all the curl options are supported, we recognize only a small subset of the commands. The purpose of this module is to parse some of the common curl options in order to populate our playground. You may refer to `index.ts` to see the currently known curl options by this module.
+#### Notes
+
+**not** all the curl options are supported, we recognize only a small subset of the commands.  
+You may refer to `index.ts` to see the currently known curl options by this module. <small>See `const curlOptions: CurlOption[]`</small>
+
+#### Implementation details:
+
+`--data-urlencode`: If this parameter passed multiple times, it just concatenates the arguments with the `&`.  
+Consider this example command:
+
+```
+curl -X POST --data-urlencode foo=bar --data-urlencode bar=zap https://example.com
+```
+
+This would produce this `body`: `foo=bar&bar=zap`
