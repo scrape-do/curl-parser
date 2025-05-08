@@ -183,7 +183,7 @@ export function parse(command: string): CurlCommand {
           case "data-urlencode": {
             let formatted = arg.replace(/^=/, "");
 
-            if (!formatted.includes("=")) formatted += "=--";
+            if (!formatted.includes("=")) formatted += "=";
 
             result.body =
               result.body === null ? formatted : `${result.body}&${formatted}`;
