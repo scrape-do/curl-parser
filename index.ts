@@ -67,6 +67,15 @@ interface CurlCommand {
   url: string | null;
   headers: { key: string; value: string }[];
   body: string | null;
+  /**
+   * Which argument was used to pass body..
+   * data: -d --data
+   * ascii: --data-ascii
+   * binary: --data-binary
+   * raw: --data-raw
+   * urlencode: --data-urlencode
+   */
+  bodyArg: "data" | "ascii" | "binary" | "raw" | "urlencode" | null;
   method: string;
   flags: CurlCommandFlags;
   cookies: string | null;
@@ -100,6 +109,7 @@ export function parse(command: string): CurlCommand {
     url: null,
     headers: [],
     body: null,
+    bodyArg: null,
     method: "get",
     flags: {},
     cookies: null,
@@ -174,10 +184,20 @@ export function parse(command: string): CurlCommand {
           case "cookie":
             result.cookies = arg;
             break;
-          case "data":
           case "data-ascii":
+            result.bodyArg = "ascii";
+            result.body = arg;
+            break;
           case "data-binary":
+            result.bodyArg = "binary";
+            result.body = arg;
+            break;
+          case "data":
+            result.bodyArg = "data";
+            result.body = arg;
+            break;
           case "data-raw":
+            result.bodyArg = "raw";
             result.body = arg;
             break;
           case "data-urlencode": {
@@ -185,6 +205,7 @@ export function parse(command: string): CurlCommand {
 
             if (!formatted.includes("=")) formatted += "=";
 
+            result.bodyArg = "urlencode";
             result.body =
               result.body === null ? formatted : `${result.body}&${formatted}`;
 

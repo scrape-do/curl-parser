@@ -55,14 +55,47 @@ describe("curl parser", () => {
     expect(command.headers).toHaveLength(15);
   });
 
-  /**
-   * Those are from the curl' manpage.
-   */
-  it("should parse multiple --data-urlencode options", () => {
+  it("should handle --data-ascii option", () => {
+    const command = parse("curl --data-ascii somedata https://example.com");
+
+    expect(command.body).toBe("somedata");
+    expect(command.bodyArg).toBe("ascii");
+  });
+
+  it("should handle --data-binary option", () => {
+    const command = parse("curl --data-binary @somefile https://example.com");
+
+    expect(command.body).toBe("@somefile");
+    expect(command.bodyArg).toBe("binary");
+  });
+
+  it("should handle --data option", () => {
+    const command = parse("curl --data somedata https://example.com");
+
+    expect(command.body).toBe("somedata");
+    expect(command.bodyArg).toBe("data");
+  });
+
+  it("should handle --data-raw option", () => {
+    const command = parse("curl --data-raw somedata https://example.com");
+
+    expect(command.body).toBe("somedata");
+    expect(command.bodyArg).toBe("raw");
+  });
+
+  it("should handle --data-urlencode option", () => {
+    const command = parse("curl --data-urlencode name=val https://example.com");
+
+    expect(command.body).toBe("name=val");
+    expect(command.bodyArg).toBe("urlencode");
+  });
+
+  it("should handle multiple --data-urlencode options", () => {
     const command = parse(
       "curl --data-urlencode name=val --data-urlencode =encodethis --data-urlencode foo=bar https://example.com"
     );
 
     expect(command.body).toBe("name=val&encodethis=&foo=bar");
+    expect(command.bodyArg).toBe("urlencode");
   });
 });
