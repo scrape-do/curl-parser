@@ -1,6 +1,6 @@
 {
   "name": "@scrape-do/curl-parser",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Parse and serialize curl commands into JavaScript objects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
