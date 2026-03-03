@@ -10,10 +10,17 @@ describe("curl parser", () => {
     expect(command.url).toBe("https://example.com");
   });
 
-  it("should parse multiple flags", () => {
-    const command = parse("curl -fsSL https://bun.sh/install");
+  it('should handle --url argument', () => {
+    const command = parse('curl --url https://example.com');
 
-    expect(command.url).toBe("https://bun.sh/install");
+    expect(command.method).toBe('get');
+    expect(command.url).toBe('https://example.com');
+  });
+
+  it('should parse multiple flags', () => {
+    const command = parse('curl -fsSL https://bun.sh/install');
+
+    expect(command.url).toBe('https://bun.sh/install');
     expect(command.flags.fail).toBe(true);
     expect(command.flags.showError).toBe(true);
     expect(command.flags.silent).toBe(true);

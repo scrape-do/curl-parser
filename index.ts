@@ -41,6 +41,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('S', 'show-error', false, 'showError'),
   new CurlOption('s', 'silent', false, 'silent'),
   new CurlOption('X', 'request', true),
+  new CurlOption(null, 'url', true),
 ];
 
 interface CurlCommandFlags {
@@ -240,6 +241,10 @@ export function parse(command: string): CurlCommand {
 
           case 'request':
             result.method = arg;
+            break;
+
+          case 'url':
+            result.url = arg;
             break;
 
           default:
