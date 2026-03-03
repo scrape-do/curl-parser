@@ -11,6 +11,8 @@
   ],
   "scripts": {
     "build": "tsc",
+    "format": "biome format --fix .",
+    "lint": "biome lint --fix .",
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
@@ -39,6 +41,7 @@
   "homepage": "https://github.com/scrape-do/curl-parser#readme",
   "packageManager": "pnpm@10.30.3",
   "devDependencies": {
+    "@biomejs/biome": "^2.4.5",
     "@jest/globals": "^30.2.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.2.0",

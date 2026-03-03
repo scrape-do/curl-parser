@@ -7,7 +7,7 @@
  *
  * See: https://man7.org/linux/man-pages/man1/curl.1.html
  */
-import { escape, split } from "./shellwords";
+import { escape, split } from './shellwords';
 
 class CurlOption {
   constructor(
@@ -18,29 +18,29 @@ class CurlOption {
     /** whether this option expects an argument or not  */
     public expectsValue: boolean,
     /** the corresponding flag of this option  */
-    public flag: keyof CurlCommandFlags | null = null
+    public flag: keyof CurlCommandFlags | null = null,
   ) {}
 }
 
 const curlOptions: CurlOption[] = [
-  new CurlOption(null, "anyauth", false, "anyauth"),
-  new CurlOption("b", "cookie", true),
-  new CurlOption(null, "basic", false, "basic"),
-  new CurlOption(null, "compressed", false, "compressed"),
-  new CurlOption(null, "crlf", false, "crlf"),
-  new CurlOption(null, "compressed-ssh", false, "compressedSsh"),
-  new CurlOption("d", "data", true),
-  new CurlOption(null, "data-ascii", true),
-  new CurlOption(null, "data-binary", true),
-  new CurlOption(null, "data-raw", true),
-  new CurlOption(null, "data-urlencode", true),
-  new CurlOption("f", "fail", false, "fail"),
-  new CurlOption("g", "globoff", false, "globoff"),
-  new CurlOption("H", "header", true),
-  new CurlOption("L", "location", true),
-  new CurlOption("S", "show-error", false, "showError"),
-  new CurlOption("s", "silent", false, "silent"),
-  new CurlOption("X", "request", true),
+  new CurlOption(null, 'anyauth', false, 'anyauth'),
+  new CurlOption('b', 'cookie', true),
+  new CurlOption(null, 'basic', false, 'basic'),
+  new CurlOption(null, 'compressed', false, 'compressed'),
+  new CurlOption(null, 'crlf', false, 'crlf'),
+  new CurlOption(null, 'compressed-ssh', false, 'compressedSsh'),
+  new CurlOption('d', 'data', true),
+  new CurlOption(null, 'data-ascii', true),
+  new CurlOption(null, 'data-binary', true),
+  new CurlOption(null, 'data-raw', true),
+  new CurlOption(null, 'data-urlencode', true),
+  new CurlOption('f', 'fail', false, 'fail'),
+  new CurlOption('g', 'globoff', false, 'globoff'),
+  new CurlOption('H', 'header', true),
+  new CurlOption('L', 'location', true),
+  new CurlOption('S', 'show-error', false, 'showError'),
+  new CurlOption('s', 'silent', false, 'silent'),
+  new CurlOption('X', 'request', true),
 ];
 
 interface CurlCommandFlags {
@@ -75,59 +75,59 @@ interface CurlCommand {
    * raw: --data-raw
    * urlencode: --data-urlencode
    */
-  bodyArg: "data" | "ascii" | "binary" | "raw" | "urlencode" | null;
+  bodyArg: 'data' | 'ascii' | 'binary' | 'raw' | 'urlencode' | null;
   method: string;
   flags: CurlCommandFlags;
   cookies: string | null;
 }
 
-type State = "command" | "url-or-arg" | "argument-value";
+type State = 'command' | 'url-or-arg' | 'argument-value';
 
 export function stringify(cmd: CurlCommand & { url: string }): string {
-  const args = ["curl"];
+  const args = ['curl'];
 
-  if (cmd.method.toLowerCase() !== "get") {
-    args.push("-X", cmd.method.toLowerCase());
+  if (cmd.method.toLowerCase() !== 'get') {
+    args.push('-X', cmd.method.toLowerCase());
   }
 
   for (const header of cmd.headers) {
-    args.push("-H", `'${header.key}:${header.value}'`);
+    args.push('-H', `'${header.key}:${header.value}'`);
   }
 
   if (cmd.body) {
-    args.push("-d", cmd.body);
+    args.push('-d', cmd.body);
   }
 
   args.push(cmd.url);
 
-  return args.map(escape).join(" ");
+  return args.map(escape).join(' ');
 }
 
 export function parse(command: string): CurlCommand {
-  const args = split(command).filter((arg) => arg !== "\\");
+  const args = split(command).filter((arg) => arg !== '\\');
   const result: CurlCommand = {
     url: null,
     headers: [],
     body: null,
     bodyArg: null,
-    method: "get",
+    method: 'get',
     flags: {},
     cookies: null,
   };
-  let state: State = "command";
+  let state: State = 'command';
   let currentOpt: CurlOption | null = null;
 
   for (const arg of args) {
     switch (state) {
-      case "command":
-        if (arg !== "curl") throw new Error(`Invalid command: ${arg}`);
-        state = "url-or-arg";
+      case 'command':
+        if (arg !== 'curl') throw new Error(`Invalid command: ${arg}`);
+        state = 'url-or-arg';
         break;
 
-      case "url-or-arg": {
-        let curlOpt: CurlOption | undefined = undefined;
+      case 'url-or-arg': {
+        let curlOpt: CurlOption | undefined;
 
-        if (arg.startsWith("--")) {
+        if (arg.startsWith('--')) {
           curlOpt = curlOptions.find((opt) => opt.long === arg.slice(2));
 
           if (!curlOpt) throw new Error(`Unrecognized argumen: ${arg}`);
@@ -136,8 +136,8 @@ export function parse(command: string): CurlCommand {
           if (curlOpt.flag) {
             result.flags[curlOpt.flag] = true;
           }
-        } else if (arg.startsWith("-")) {
-          const flags = arg.slice(1).split("");
+        } else if (arg.startsWith('-')) {
+          const flags = arg.slice(1).split('');
 
           flags.forEach((flag, i) => {
             curlOpt = curlOptions.find((opt) => opt.short === flag);
@@ -149,7 +149,7 @@ export function parse(command: string): CurlCommand {
 
             if (curlOpt.expectsValue && !isLast) {
               throw new Error(
-                `Value expecting argument "${flag}" must be the last in ${arg}`
+                `Value expecting argument "${flag}" must be the last in ${arg}`,
               );
             }
 
@@ -162,7 +162,7 @@ export function parse(command: string): CurlCommand {
 
         if (curlOpt) {
           if (curlOpt.expectsValue) {
-            state = "argument-value";
+            state = 'argument-value';
             currentOpt = curlOpt;
           }
 
@@ -171,7 +171,7 @@ export function parse(command: string): CurlCommand {
 
         if (result.url)
           throw new Error(
-            `unrecognized positional argument ${arg}. Url was already set.`
+            `unrecognized positional argument ${arg}. Url was already set.`,
           );
 
         result.url = arg;
@@ -179,33 +179,33 @@ export function parse(command: string): CurlCommand {
         break;
       }
 
-      case "argument-value": {
+      case 'argument-value': {
         switch (currentOpt?.long) {
-          case "cookie":
+          case 'cookie':
             result.cookies = arg;
             break;
-          case "data-ascii":
-            result.bodyArg = "ascii";
+          case 'data-ascii':
+            result.bodyArg = 'ascii';
             result.body = arg;
             break;
-          case "data-binary":
-            result.bodyArg = "binary";
+          case 'data-binary':
+            result.bodyArg = 'binary';
             result.body = arg;
             break;
-          case "data":
-            result.bodyArg = "data";
+          case 'data':
+            result.bodyArg = 'data';
             result.body = arg;
             break;
-          case "data-raw":
-            result.bodyArg = "raw";
+          case 'data-raw':
+            result.bodyArg = 'raw';
             result.body = arg;
             break;
-          case "data-urlencode": {
-            let formatted = arg.replace(/^=/, "");
+          case 'data-urlencode': {
+            let formatted = arg.replace(/^=/, '');
 
-            if (!formatted.includes("=")) formatted += "=";
+            if (!formatted.includes('=')) formatted += '=';
 
-            result.bodyArg = "urlencode";
+            result.bodyArg = 'urlencode';
             result.body =
               result.body === null ? formatted : `${result.body}&${formatted}`;
 
@@ -213,7 +213,7 @@ export function parse(command: string): CurlCommand {
           }
 
           // parse header argument value
-          case "header": {
+          case 'header': {
             const matches = /^([^:]+)(:\s?(.+))?;?$/.exec(arg);
 
             if (!matches) {
@@ -222,23 +222,23 @@ export function parse(command: string): CurlCommand {
 
             result.headers.push({
               key: matches[1],
-              value: matches[3] ?? "",
+              value: matches[3] ?? '',
             });
 
             break;
           }
 
-          case "location":
+          case 'location':
             if (result.url) {
               throw new Error(
-                `URL was already set, and an additional --location argument provided with value "${arg}"`
+                `URL was already set, and an additional --location argument provided with value "${arg}"`,
               );
             }
 
             result.url = arg;
             break;
 
-          case "request":
+          case 'request':
             result.method = arg;
             break;
 
@@ -246,7 +246,7 @@ export function parse(command: string): CurlCommand {
             throw new Error(`no argument set for option ${currentOpt?.long}`);
         }
 
-        state = "url-or-arg";
+        state = 'url-or-arg';
         currentOpt = null;
       }
     }

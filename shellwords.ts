@@ -24,9 +24,9 @@
 const scan = (
   string: string,
   pattern: RegExp,
-  callback: (match: RegExpMatchArray) => void
+  callback: (match: RegExpMatchArray) => void,
 ) => {
-  let result = "";
+  let result = '';
 
   while (string.length > 0) {
     const match = string.match(pattern);
@@ -37,7 +37,7 @@ const scan = (
       string = string.slice(match.index + match[0].length);
     } else {
       result += string;
-      string = "";
+      string = '';
     }
   }
 
@@ -50,9 +50,9 @@ const scan = (
  * @param line A string to split.
  * @returns An array of the split tokens.
  */
-export const split = (line: string = "") => {
+export const split = (line: string = '') => {
   const words = [];
-  let field = "";
+  let field = '';
   scan(
     line,
     /\s*(?:([^\s\\\'\"]+)|'((?:[^\'\\]|\\.)*)'|"((?:[^\"\\]|\\.)*)"|(\\.?)|(\S))(\s|$)?/,
@@ -66,7 +66,7 @@ export const split = (line: string = "") => {
       if (word) {
         field += word;
       } else {
-        let addition;
+        let addition: string = '';
 
         if (sq) {
           addition = sq;
@@ -77,15 +77,15 @@ export const split = (line: string = "") => {
         }
 
         if (addition) {
-          field += addition.replace(/\\(?=.)/, "");
+          field += addition.replace(/\\(?=.)/, '');
         }
       }
 
       if (separator != null) {
         words.push(field);
-        field = "";
+        field = '';
       }
-    }
+    },
   );
 
   if (field) {
@@ -101,8 +101,8 @@ export const split = (line: string = "") => {
  * @param str A string to escape.
  * @returns The escaped string.
  */
-export const escape = (str = "") => {
+export const escape = (str = '') => {
   return str
-    .replace(/([^A-Za-z0-9_\-.,:/@\n])/g, "\\$1")
+    .replace(/([^A-Za-z0-9_\-.,:/@\n])/g, '\\$1')
     .replace(/\n/g, "'\n'");
 };
