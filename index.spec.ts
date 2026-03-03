@@ -1,13 +1,13 @@
 // if we just import ".", typescript
 // uses the built version of our library. we want jest to use typescript code directly so we directly import module "./index"
-import { parse } from "./index";
+import { parse } from './index';
 
-describe("curl parser", () => {
-  it("should parse basic curl command", () => {
-    const command = parse("curl https://example.com");
+describe('curl parser', () => {
+  it('should parse basic curl command', () => {
+    const command = parse('curl https://example.com');
 
-    expect(command.method).toBe("get");
-    expect(command.url).toBe("https://example.com");
+    expect(command.method).toBe('get');
+    expect(command.url).toBe('https://example.com');
   });
 
   it('should handle --url argument', () => {
@@ -26,19 +26,19 @@ describe("curl parser", () => {
     expect(command.flags.silent).toBe(true);
   });
 
-  it("should parse headers", () => {
+  it('should parse headers', () => {
     const command = parse(
-      "curl -H x-foo:bar --header x-baz:zap https://example.com"
+      'curl -H x-foo:bar --header x-baz:zap https://example.com',
     );
 
     expect(command.headers).toHaveLength(2);
     expect(command.headers).toMatchObject([
-      { key: "x-foo", value: "bar" },
-      { key: "x-baz", value: "zap" },
+      { key: 'x-foo', value: 'bar' },
+      { key: 'x-baz', value: 'zap' },
     ]);
   });
 
-  it("should parse complex request from chrome developer tools", () => {
+  it('should parse complex request from chrome developer tools', () => {
     const command = parse(`curl 'https://bun.sh/' \
   -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8' \
   -H 'accept-language: en-US,en;q=0.5' \
@@ -57,52 +57,52 @@ describe("curl parser", () => {
   -H 'upgrade-insecure-requests: 1' \
   -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36'`);
 
-    expect(command.url).toBe("https://bun.sh/");
-    expect(command.cookies).toBe("ph_phc=abc");
+    expect(command.url).toBe('https://bun.sh/');
+    expect(command.cookies).toBe('ph_phc=abc');
     expect(command.headers).toHaveLength(15);
   });
 
-  it("should handle --data-ascii option", () => {
-    const command = parse("curl --data-ascii somedata https://example.com");
+  it('should handle --data-ascii option', () => {
+    const command = parse('curl --data-ascii somedata https://example.com');
 
-    expect(command.body).toBe("somedata");
-    expect(command.bodyArg).toBe("ascii");
+    expect(command.body).toBe('somedata');
+    expect(command.bodyArg).toBe('ascii');
   });
 
-  it("should handle --data-binary option", () => {
-    const command = parse("curl --data-binary @somefile https://example.com");
+  it('should handle --data-binary option', () => {
+    const command = parse('curl --data-binary @somefile https://example.com');
 
-    expect(command.body).toBe("@somefile");
-    expect(command.bodyArg).toBe("binary");
+    expect(command.body).toBe('@somefile');
+    expect(command.bodyArg).toBe('binary');
   });
 
-  it("should handle --data option", () => {
-    const command = parse("curl --data somedata https://example.com");
+  it('should handle --data option', () => {
+    const command = parse('curl --data somedata https://example.com');
 
-    expect(command.body).toBe("somedata");
-    expect(command.bodyArg).toBe("data");
+    expect(command.body).toBe('somedata');
+    expect(command.bodyArg).toBe('data');
   });
 
-  it("should handle --data-raw option", () => {
-    const command = parse("curl --data-raw somedata https://example.com");
+  it('should handle --data-raw option', () => {
+    const command = parse('curl --data-raw somedata https://example.com');
 
-    expect(command.body).toBe("somedata");
-    expect(command.bodyArg).toBe("raw");
+    expect(command.body).toBe('somedata');
+    expect(command.bodyArg).toBe('raw');
   });
 
-  it("should handle --data-urlencode option", () => {
-    const command = parse("curl --data-urlencode name=val https://example.com");
+  it('should handle --data-urlencode option', () => {
+    const command = parse('curl --data-urlencode name=val https://example.com');
 
-    expect(command.body).toBe("name=val");
-    expect(command.bodyArg).toBe("urlencode");
+    expect(command.body).toBe('name=val');
+    expect(command.bodyArg).toBe('urlencode');
   });
 
-  it("should handle multiple --data-urlencode options", () => {
+  it('should handle multiple --data-urlencode options', () => {
     const command = parse(
-      "curl --data-urlencode name=val --data-urlencode =encodethis --data-urlencode foo=bar https://example.com"
+      'curl --data-urlencode name=val --data-urlencode =encodethis --data-urlencode foo=bar https://example.com',
     );
 
-    expect(command.body).toBe("name=val&encodethis=&foo=bar");
-    expect(command.bodyArg).toBe("urlencode");
+    expect(command.body).toBe('name=val&encodethis=&foo=bar');
+    expect(command.bodyArg).toBe('urlencode');
   });
 });
