@@ -1,4 +1,4 @@
-import { parse } from '..';
+import { parse } from '../index';
 
 describe('http methods', () => {
   it('should handle --request option', () => {
@@ -17,5 +17,11 @@ describe('http methods', () => {
     const cmd = parse('curl --request OPTIONS http://example.com');
 
     expect(cmd.method).toBe('options');
+  });
+
+  it('should handle concatenated http method options like -XHEAD', () => {
+    const cmd = parse('curl -XHEAD http://example.com');
+
+    expect(cmd.method).toBe('head');
   });
 });

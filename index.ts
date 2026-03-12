@@ -143,12 +143,26 @@ export function parse(command: string): CurlCommand {
           }
         } else if (arg.startsWith('-')) {
           const flags = arg.slice(1).split('');
+          let handled = false;
 
           flags.forEach((flag, i) => {
+            if (handled) return;
+
             curlOpt = curlOptions.find((opt) => opt.short === flag);
 
             if (!curlOpt)
               throw new Error(`Unrecognized option: ${flag} in "${arg}"`);
+
+            const isFirst = i === 0;
+
+            if (isFirst && curlOpt.expectsValue && arg.length > 2) {
+              // handle concatenated values
+              currentOpt = curlOpt;
+              handleArgValue(arg.slice(2));
+              handled = true;
+              currentOpt = null;
+              return;
+            }
 
             const isLast = i === flags.length - 1;
 
@@ -163,6 +177,8 @@ export function parse(command: string): CurlCommand {
               result.flags[curlOpt.flag] = true;
             }
           });
+
+          if (handled) continue;
         }
 
         if (curlOpt) {
@@ -185,79 +201,83 @@ export function parse(command: string): CurlCommand {
       }
 
       case 'argument-value': {
-        switch (currentOpt?.long) {
-          case 'cookie':
-            result.cookies = arg;
-            break;
-          case 'data-ascii':
-            result.bodyArg = 'ascii';
-            result.body = arg;
-            break;
-          case 'data-binary':
-            result.bodyArg = 'binary';
-            result.body = arg;
-            break;
-          case 'data':
-            result.bodyArg = 'data';
-            result.body = arg;
-            break;
-          case 'data-raw':
-            result.bodyArg = 'raw';
-            result.body = arg;
-            break;
-          case 'data-urlencode': {
-            let formatted = arg.replace(/^=/, '');
-
-            if (!formatted.includes('=')) formatted += '=';
-
-            result.bodyArg = 'urlencode';
-            result.body =
-              result.body === null ? formatted : `${result.body}&${formatted}`;
-
-            break;
-          }
-
-          // parse header argument value
-          case 'header': {
-            const matches = /^([^:]+)(:\s?(.+))?;?$/.exec(arg);
-
-            if (!matches) {
-              throw new Error(`Invalid header value: ${arg}`);
-            }
-
-            result.headers.push({
-              key: matches[1],
-              value: matches[3] ?? '',
-            });
-
-            break;
-          }
-
-          case 'location':
-            if (result.url) {
-              throw new Error(
-                `URL was already set, and an additional --location argument provided with value "${arg}"`,
-              );
-            }
-
-            result.url = arg;
-            break;
-
-          case 'request':
-            result.method = arg.toLowerCase();
-            break;
-
-          case 'url':
-            result.url = arg;
-            break;
-
-          default:
-            throw new Error(`no argument set for option ${currentOpt?.long}`);
-        }
+        handleArgValue(arg);
 
         state = 'url-or-arg';
         currentOpt = null;
       }
+    }
+  }
+
+  function handleArgValue(arg: string) {
+    switch (currentOpt?.long) {
+      case 'cookie':
+        result.cookies = arg;
+        break;
+      case 'data-ascii':
+        result.bodyArg = 'ascii';
+        result.body = arg;
+        break;
+      case 'data-binary':
+        result.bodyArg = 'binary';
+        result.body = arg;
+        break;
+      case 'data':
+        result.bodyArg = 'data';
+        result.body = arg;
+        break;
+      case 'data-raw':
+        result.bodyArg = 'raw';
+        result.body = arg;
+        break;
+      case 'data-urlencode': {
+        let formatted = arg.replace(/^=/, '');
+
+        if (!formatted.includes('=')) formatted += '=';
+
+        result.bodyArg = 'urlencode';
+        result.body =
+          result.body === null ? formatted : `${result.body}&${formatted}`;
+
+        break;
+      }
+
+      // parse header argument value
+      case 'header': {
+        const matches = /^([^:]+)(:\s?(.+))?;?$/.exec(arg);
+
+        if (!matches) {
+          throw new Error(`Invalid header value: ${arg}`);
+        }
+
+        result.headers.push({
+          key: matches[1],
+          value: matches[3] ?? '',
+        });
+
+        break;
+      }
+
+      case 'location':
+        if (result.url) {
+          throw new Error(
+            `URL was already set, and an additional --location argument provided with value "${arg}"`,
+          );
+        }
+
+        result.url = arg;
+        break;
+
+      case 'request':
+        result.method = arg.toLowerCase();
+        break;
+
+      case 'url':
+        result.url = arg;
+        break;
+
+      default:
+        throw new Error(`no argument set for option ${currentOpt?.long}`);
     }
   }
 
