@@ -1,6 +1,6 @@
 # curl-parser
 
-This module parses `curl` commands into JavaScript objects. That's used in [our playground](https://dashboard.scrape.do/playground)(You may create a free account to try it out).
+This module parses `curl` commands into JavaScript objects. That's used in [our playground](https://dashboard.scrape.do/playground?utm_source=npm&utm_medium=package) (You may create a free account to try it out).
 
 ### Installation
 
