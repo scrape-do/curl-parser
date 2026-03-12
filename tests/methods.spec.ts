@@ -1,0 +1,21 @@
+import { parse } from '..';
+
+describe('http methods', () => {
+  it('should handle --request option', () => {
+    const cmd = parse('curl --request head http://example.com');
+
+    expect(cmd.method).toBe('head');
+  });
+
+  it('should handle -X option', () => {
+    const cmd = parse('curl -X put http://example.com');
+
+    expect(cmd.method).toBe('put');
+  });
+
+  it('should lowercase http method', () => {
+    const cmd = parse('curl --request OPTIONS http://example.com');
+
+    expect(cmd.method).toBe('options');
+  });
+});

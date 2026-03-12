@@ -77,6 +77,10 @@ interface CurlCommand {
    * urlencode: --data-urlencode
    */
   bodyArg: 'data' | 'ascii' | 'binary' | 'raw' | 'urlencode' | null;
+
+  /**
+   * lowercased request method
+   */
   method: string;
   flags: CurlCommandFlags;
   cookies: string | null;
@@ -240,7 +244,7 @@ export function parse(command: string): CurlCommand {
             break;
 
           case 'request':
-            result.method = arg;
+            result.method = arg.toLowerCase();
             break;
 
           case 'url':
