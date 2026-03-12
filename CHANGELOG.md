@@ -1,4 +1,7 @@
 ## [UNRELEASED]
+
+## 0.3.2
+
 * always lowercase the http method
 * feat: handle short options with concatenated values
 
