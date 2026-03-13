@@ -87,6 +87,7 @@ export interface CurlCommand {
   cookies: string | null;
 
   userAgent?: string;
+  compressed?: boolean;
 }
 
 type State = 'command' | 'url-or-arg' | 'argument-value';
@@ -286,6 +287,10 @@ export function parse(command: string): CurlCommand {
       default:
         throw new Error(`no argument set for option ${currentOpt?.long}`);
     }
+  }
+
+  if (result.flags.compressed) {
+    result.compressed = true;
   }
 
   return result;

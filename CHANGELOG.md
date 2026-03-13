@@ -2,6 +2,7 @@
 
 * expose `CurlCommand` interface.
 * handle `-A/--user-agent` option, expose `userAgent?: string`
+* handle `--compressed` option, expose `compressed?: boolean`
 
 ## 0.3.2
 
