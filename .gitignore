@@ -1,3 +1,5 @@
+.claude/*.local.json
+
 dist
 
 # Logs
