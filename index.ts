@@ -43,6 +43,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('X', 'request', true),
   new CurlOption(null, 'url', true),
   new CurlOption('A', 'user-agent', true),
+  new CurlOption('k', 'insecure', false, 'insecure'),
 ];
 
 interface CurlCommandFlags {
@@ -63,6 +64,8 @@ interface CurlCommandFlags {
   showError?: boolean;
 
   silent?: boolean;
+
+  insecure?: boolean;
 }
 
 export interface CurlCommand {
@@ -88,6 +91,7 @@ export interface CurlCommand {
 
   userAgent?: string;
   compressed?: boolean;
+  insecure?: boolean;
 }
 
 type State = 'command' | 'url-or-arg' | 'argument-value';
@@ -291,6 +295,10 @@ export function parse(command: string): CurlCommand {
 
   if (result.flags.compressed) {
     result.compressed = true;
+  }
+
+  if (result.flags.insecure) {
+    result.insecure = true;
   }
 
   return result;
