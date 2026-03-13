@@ -5,6 +5,7 @@
 * handle `--compressed` option, expose `compressed?: boolean`
 * handle `-k/--insecure` option, expose `insecure?: boolean`
 * handle `--digest` option, expose `digest?: boolean`
+* handle `--ntlm` option, expose `flags.ntlm?: boolean`
 
 ## 0.3.2
 

@@ -45,6 +45,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('A', 'user-agent', true),
   new CurlOption('k', 'insecure', false, 'insecure'),
   new CurlOption(null, 'digest', false, 'digest'),
+  new CurlOption(null, 'ntlm', false, 'ntlm'),
 ];
 
 interface CurlCommandFlags {
@@ -69,6 +70,8 @@ interface CurlCommandFlags {
   insecure?: boolean;
 
   digest?: boolean;
+
+  ntlm?: boolean;
 }
 
 export interface CurlCommand {
@@ -89,9 +92,13 @@ export interface CurlCommand {
    * lowercased request method
    */
   method: string;
-  flags: CurlCommandFlags;
-  cookies: string | null;
 
+  /**
+   * curl's boolean command-line options
+   */
+  flags: CurlCommandFlags;
+
+  cookies: string | null;
   userAgent?: string;
   compressed?: boolean;
   insecure?: boolean;
