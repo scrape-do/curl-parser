@@ -19,6 +19,8 @@ class CurlOption {
     public expectsValue: boolean,
     /** the corresponding flag of this option  */
     public flag: keyof CurlCommandFlags | null = null,
+    /** Allow boolean option to be negated with --no- prefix */
+    public allowsNegating = false,
   ) {}
 }
 
@@ -26,25 +28,25 @@ const curlOptions: CurlOption[] = [
   new CurlOption(null, 'anyauth', false, 'anyauth'),
   new CurlOption('b', 'cookie', true),
   new CurlOption(null, 'basic', false, 'basic'),
-  new CurlOption(null, 'compressed', false, 'compressed'),
-  new CurlOption(null, 'crlf', false, 'crlf'),
-  new CurlOption(null, 'compressed-ssh', false, 'compressedSsh'),
+  new CurlOption(null, 'compressed', false, 'compressed', true),
+  new CurlOption(null, 'crlf', false, 'crlf', true),
+  new CurlOption(null, 'compressed-ssh', false, 'compressedSsh', true),
   new CurlOption('d', 'data', true),
   new CurlOption(null, 'data-ascii', true),
   new CurlOption(null, 'data-binary', true),
   new CurlOption(null, 'data-raw', true),
   new CurlOption(null, 'data-urlencode', true),
-  new CurlOption('f', 'fail', false, 'fail'),
-  new CurlOption('g', 'globoff', false, 'globoff'),
+  new CurlOption('f', 'fail', false, 'fail', true),
+  new CurlOption('g', 'globoff', false, 'globoff', true),
   new CurlOption('H', 'header', true),
   new CurlOption('L', 'location', true),
-  new CurlOption('S', 'show-error', false, 'showError'),
-  new CurlOption('s', 'silent', false, 'silent'),
+  new CurlOption('S', 'show-error', false, 'showError', true),
+  new CurlOption('s', 'silent', false, 'silent', true),
   new CurlOption('X', 'request', true),
   new CurlOption(null, 'url', true),
   new CurlOption('A', 'user-agent', true),
-  new CurlOption('k', 'insecure', false, 'insecure'),
-  new CurlOption(null, 'digest', false, 'digest'),
+  new CurlOption('k', 'insecure', false, 'insecure', true),
+  new CurlOption(null, 'digest', false, 'digest', true),
   new CurlOption(null, 'ntlm', false, 'ntlm'),
 ];
 
@@ -61,14 +63,53 @@ interface CurlCommandFlags {
 
   fail?: boolean;
 
+  /**
+    -g, --globoff
+      This option switches off the "URL globbing parser". When
+      you set this option, you can specify URLs that contain the
+      letters {}[] without having curl itself interpret them.
+      Note that these letters are not normal legal URL contents
+      but they should be encoded according to the URI standard.
+
+      Providing -g, --globoff multiple times has no extra effect.
+      Disable it again with --no-globoff.
+
+      Example:
+              curl -g "https://example.com/{[]}}}}"
+
+      See also -K, --config and -q, --disable.
+  */
   globoff?: boolean;
 
   showError?: boolean;
 
+  /**
+    -s, --silent
+      Silent or quiet mode. Do not show progress meter or error
+      messages. Makes Curl mute. It still outputs the data you
+      ask for, potentially even to the terminal/stdout unless you
+      redirect it.
+
+      Use -S, --show-error in addition to this option to disable
+      progress meter but still show error messages.
+
+      Providing -s, --silent multiple times has no extra effect.
+      Disable it again with --no-silent.
+   */
   silent?: boolean;
 
   insecure?: boolean;
 
+  /**
+    (HTTP) Enables HTTP Digest authentication. This is an
+    authentication scheme that prevents the password from being
+    sent over the wire in clear text. Use this in combination
+    with the normal -u, --user option to set user name and
+    password.
+
+    Providing --digest multiple times has no extra effect.
+    Disable it again with --no-digest.
+   */
   digest?: boolean;
 
   ntlm?: boolean;
@@ -151,7 +192,18 @@ export function parse(command: string): CurlCommand {
       case 'url-or-arg': {
         let curlOpt: CurlOption | undefined;
 
-        if (arg.startsWith('--')) {
+        if (arg.startsWith('--no-')) {
+          curlOpt = curlOptions.find((opt) => opt.long === arg.slice(5));
+
+          if (!curlOpt || !curlOpt.flag)
+            throw new Error(`Unrecognized argument: ${arg}`);
+
+          if (!curlOpt.allowsNegating)
+            throw new Error(`Option does not support negating: ${arg}`);
+
+          result.flags[curlOpt.flag] = false;
+          continue;
+        } else if (arg.startsWith('--')) {
           curlOpt = curlOptions.find((opt) => opt.long === arg.slice(2));
 
           if (!curlOpt) throw new Error(`Unrecognized argument: ${arg}`);

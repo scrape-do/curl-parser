@@ -6,6 +6,7 @@
 * handle `-k/--insecure` option, expose `insecure?: boolean`
 * handle `--digest` option, expose `digest?: boolean`
 * handle `--ntlm` option, expose `flags.ntlm?: boolean`
+* add support for negating boolean options with `--no-` prefix
 
 ## 0.3.2
 
