@@ -154,7 +154,7 @@ export function parse(command: string): CurlCommand {
         if (arg.startsWith('--')) {
           curlOpt = curlOptions.find((opt) => opt.long === arg.slice(2));
 
-          if (!curlOpt) throw new Error(`Unrecognized argumen: ${arg}`);
+          if (!curlOpt) throw new Error(`Unrecognized argument: ${arg}`);
 
           // enable the flag
           if (curlOpt.flag) {
