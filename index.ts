@@ -42,6 +42,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('s', 'silent', false, 'silent'),
   new CurlOption('X', 'request', true),
   new CurlOption(null, 'url', true),
+  new CurlOption('A', 'user-agent', true),
 ];
 
 interface CurlCommandFlags {
@@ -64,7 +65,7 @@ interface CurlCommandFlags {
   silent?: boolean;
 }
 
-interface CurlCommand {
+export interface CurlCommand {
   url: string | null;
   headers: { key: string; value: string }[];
   body: string | null;
@@ -84,6 +85,8 @@ interface CurlCommand {
   method: string;
   flags: CurlCommandFlags;
   cookies: string | null;
+
+  userAgent?: string;
 }
 
 type State = 'command' | 'url-or-arg' | 'argument-value';
@@ -270,6 +273,10 @@ export function parse(command: string): CurlCommand {
 
       case 'request':
         result.method = arg.toLowerCase();
+        break;
+
+      case 'user-agent':
+        result.userAgent = arg;
         break;
 
       case 'url':

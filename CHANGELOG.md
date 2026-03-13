@@ -1,5 +1,8 @@
 ## [UNRELEASED]
 
+* expose `CurlCommand` interface.
+* handle `-A/--user-agent` option, expose `userAgent?: string`
+
 ## 0.3.2
 
 * always lowercase the http method
