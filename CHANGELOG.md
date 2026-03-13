@@ -4,6 +4,7 @@
 * handle `-A/--user-agent` option, expose `userAgent?: string`
 * handle `--compressed` option, expose `compressed?: boolean`
 * handle `-k/--insecure` option, expose `insecure?: boolean`
+* handle `--digest` option, expose `digest?: boolean`
 
 ## 0.3.2
 
