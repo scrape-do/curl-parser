@@ -4,7 +4,7 @@ describe('compressed', () => {
   it('should handle --compressed option', () => {
     const cmd = parse('curl --compressed http://example.com');
 
-    expect(cmd.compressed).toBe(true);
+    expect(cmd.flags.compressed).toBe(true);
   });
 
   it('should handle --no-compressed option', () => {
@@ -16,6 +16,6 @@ describe('compressed', () => {
   it('should leave compressed undefined when not provided', () => {
     const cmd = parse('curl http://example.com');
 
-    expect(cmd.compressed).toBeUndefined();
+    expect(cmd.flags.compressed).toBeUndefined();
   });
 });

@@ -4,7 +4,7 @@ describe('digest', () => {
   it('should handle --digest option', () => {
     const cmd = parse('curl --digest http://example.com');
 
-    expect(cmd.digest).toBe(true);
+    expect(cmd.flags.digest).toBe(true);
   });
 
   it('should handle --no-digest option', () => {
@@ -16,6 +16,6 @@ describe('digest', () => {
   it('should leave digest undefined when not provided', () => {
     const cmd = parse('curl http://example.com');
 
-    expect(cmd.digest).toBeUndefined();
+    expect(cmd.flags.digest).toBeUndefined();
   });
 });
