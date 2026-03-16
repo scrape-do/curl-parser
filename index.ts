@@ -52,7 +52,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('u', 'user', true),
 ];
 
-interface CurlCommandFlags {
+export interface CurlCommandFlags {
   anyauth?: boolean;
 
   basic?: boolean;
