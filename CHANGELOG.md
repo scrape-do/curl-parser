@@ -8,6 +8,7 @@
 * handle `--ntlm` option, expose `flags.ntlm?: boolean`
 * add support for negating boolean options with `--no-` prefix
 * handle `-I/--head` option, expose `flags.head?: boolean`
+* handle `-u/--user` option, expose `user?: string`
 
 ## 0.3.2
 

@@ -49,6 +49,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption(null, 'digest', false, 'digest', true),
   new CurlOption(null, 'ntlm', false, 'ntlm'),
   new CurlOption('I', 'head', false, 'head', true),
+  new CurlOption('u', 'user', true),
 ];
 
 interface CurlCommandFlags {
@@ -144,6 +145,7 @@ export interface CurlCommand {
 
   cookies: string | null;
   userAgent?: string;
+  user?: string;
 }
 
 type State = 'command' | 'url-or-arg' | 'argument-value';
@@ -345,6 +347,10 @@ export function parse(command: string): CurlCommand {
 
       case 'user-agent':
         result.userAgent = arg;
+        break;
+
+      case 'user':
+        result.user = arg;
         break;
 
       case 'url':
