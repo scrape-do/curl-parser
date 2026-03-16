@@ -48,6 +48,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('k', 'insecure', false, 'insecure', true),
   new CurlOption(null, 'digest', false, 'digest', true),
   new CurlOption(null, 'ntlm', false, 'ntlm'),
+  new CurlOption('I', 'head', false, 'head', true),
 ];
 
 interface CurlCommandFlags {
@@ -113,6 +114,8 @@ interface CurlCommandFlags {
   digest?: boolean;
 
   ntlm?: boolean;
+
+  head?: boolean;
 }
 
 export interface CurlCommand {

@@ -2,11 +2,12 @@
 
 * expose `CurlCommand` interface.
 * handle `-A/--user-agent` option, expose `userAgent?: string`
-* handle `--compressed` option, expose `compressed?: boolean`
-* handle `-k/--insecure` option, expose `insecure?: boolean`
-* handle `--digest` option, expose `digest?: boolean`
+* handle `--compressed` option, expose `flags.compressed?: boolean`
+* handle `-k/--insecure` option, expose `flags.insecure?: boolean`
+* handle `--digest` option, expose `flags.digest?: boolean`
 * handle `--ntlm` option, expose `flags.ntlm?: boolean`
 * add support for negating boolean options with `--no-` prefix
+* handle `-I/--head` option, expose `flags.head?: boolean`
 
 ## 0.3.2
 
