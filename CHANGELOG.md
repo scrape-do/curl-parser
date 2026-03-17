@@ -1,5 +1,7 @@
 ## [UNRELEASED]
 
+## 0.4.0
+
 * expose `CurlCommand` and `CurlCommandFlags` interfaces.
 * handle `-A/--user-agent` option, expose `userAgent?: string`
 * handle `--compressed` option, expose `flags.compressed?: boolean`
