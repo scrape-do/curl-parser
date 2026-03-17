@@ -48,6 +48,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('k', 'insecure', false, 'insecure', true),
   new CurlOption(null, 'digest', false, 'digest', true),
   new CurlOption(null, 'ntlm', false, 'ntlm'),
+  new CurlOption('G', 'get', false, 'get', true),
   new CurlOption('I', 'head', false, 'head', true),
   new CurlOption('u', 'user', true),
 ];
@@ -117,6 +118,8 @@ export interface CurlCommandFlags {
   ntlm?: boolean;
 
   head?: boolean;
+
+  get?: boolean;
 }
 
 export interface CurlCommand {
