@@ -9,6 +9,7 @@
 * add support for negating boolean options with `--no-` prefix
 * handle `-I/--head` option, expose `flags.head?: boolean`
 * handle `-u/--user` option, expose `user?: string`
+* handle `-G/--get` option, expose `flags.get?: boolean`
 
 ## 0.3.2
 
