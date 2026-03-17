@@ -51,6 +51,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('G', 'get', false, 'get', true),
   new CurlOption('I', 'head', false, 'head', true),
   new CurlOption('u', 'user', true),
+  new CurlOption('F', 'form', true),
 ];
 
 export interface CurlCommandFlags {
@@ -149,6 +150,7 @@ export interface CurlCommand {
   cookies: string | null;
   userAgent?: string;
   user?: string;
+  formData?: { key: string; value: string }[];
 }
 
 type State = 'command' | 'url-or-arg' | 'argument-value';
@@ -359,6 +361,19 @@ export function parse(command: string): CurlCommand {
       case 'url':
         result.url = arg;
         break;
+
+      case 'form': {
+        const eqIdx = arg.indexOf('=');
+        if (eqIdx === -1) throw new Error(`Invalid form value: ${arg}`);
+
+        result.formData = result.formData ?? [];
+
+        result.formData.push({
+          key: arg.slice(0, eqIdx),
+          value: arg.slice(eqIdx + 1),
+        });
+        break;
+      }
 
       default:
         throw new Error(`no argument set for option ${currentOpt?.long}`);

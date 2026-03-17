@@ -10,6 +10,7 @@
 * handle `-I/--head` option, expose `flags.head?: boolean`
 * handle `-u/--user` option, expose `user?: string`
 * handle `-G/--get` option, expose `flags.get?: boolean`
+* handle `-F/--form` option, expose `formData?: boolean`
 
 ## 0.3.2
 
