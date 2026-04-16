@@ -39,7 +39,7 @@ const curlOptions: CurlOption[] = [
   new CurlOption('f', 'fail', false, 'fail', true),
   new CurlOption('g', 'globoff', false, 'globoff', true),
   new CurlOption('H', 'header', true),
-  new CurlOption('L', 'location', true),
+  new CurlOption('L', 'location', false, 'location', true),
   new CurlOption('S', 'show-error', false, 'showError', true),
   new CurlOption('s', 'silent', false, 'silent', true),
   new CurlOption('X', 'request', true),
@@ -84,6 +84,17 @@ export interface CurlCommandFlags {
       See also -K, --config and -q, --disable.
   */
   globoff?: boolean;
+
+  /**
+       -L, --location
+        (HTTP) If the server reports that the requested page has
+        moved to a different location (indicated with a Location:
+        header and a 3XX response code), this option makes curl
+        redo the request on the new place. If used together with
+        -i, --include or -I, --head, headers from all requested
+        pages are shown.
+  */
+  location?: boolean;
 
   showError?: boolean;
 
@@ -335,16 +346,6 @@ export function parse(command: string): CurlCommand {
 
         break;
       }
-
-      case 'location':
-        if (result.url) {
-          throw new Error(
-            `URL was already set, and an additional --location argument provided with value "${arg}"`,
-          );
-        }
-
-        result.url = arg;
-        break;
 
       case 'request':
         result.method = arg.toLowerCase();
