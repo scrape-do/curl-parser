@@ -1,5 +1,7 @@
 ## [UNRELEASED]
 
+## 0.4.1
+
 * [fix and feature]: Add support for -L/--location flag as a boolean (flags.location?: boolean) with --no-location negation, correcting prior misparsing as a URL argument.
 
 ## 0.4.0
