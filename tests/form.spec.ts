@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { parse } from '../index';
 
 describe('form', () => {
@@ -14,7 +15,9 @@ describe('form', () => {
   });
 
   it('should handle multiple -F options', () => {
-    const cmd = parse('curl -F "name=value" -F "file=@photo.jpg" http://example.com');
+    const cmd = parse(
+      'curl -F "name=value" -F "file=@photo.jpg" http://example.com',
+    );
 
     expect(cmd.formData).toEqual([
       { key: 'name', value: 'value' },

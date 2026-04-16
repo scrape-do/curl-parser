@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { parse } from '../index';
 
 describe('data-urlencode', () => {
@@ -9,7 +10,9 @@ describe('data-urlencode', () => {
   });
 
   it('should strip leading = from value', () => {
-    const cmd = parse('curl --data-urlencode "=hello world" http://example.com');
+    const cmd = parse(
+      'curl --data-urlencode "=hello world" http://example.com',
+    );
 
     expect(cmd.body).toBe('hello world=');
     expect(cmd.bodyArg).toBe('urlencode');
@@ -23,7 +26,9 @@ describe('data-urlencode', () => {
   });
 
   it('should concatenate multiple --data-urlencode values with &', () => {
-    const cmd = parse('curl --data-urlencode "key=value" --data-urlencode "foo=bar" http://example.com');
+    const cmd = parse(
+      'curl --data-urlencode "key=value" --data-urlencode "foo=bar" http://example.com',
+    );
 
     expect(cmd.body).toBe('key=value&foo=bar');
     expect(cmd.bodyArg).toBe('urlencode');

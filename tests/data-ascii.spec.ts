@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { parse } from '../index';
 
 describe('data-ascii', () => {
@@ -9,7 +10,9 @@ describe('data-ascii', () => {
   });
 
   it('should handle --data-ascii with key=value pairs', () => {
-    const cmd = parse('curl --data-ascii "key=value&foo=bar" http://example.com');
+    const cmd = parse(
+      'curl --data-ascii "key=value&foo=bar" http://example.com',
+    );
 
     expect(cmd.body).toBe('key=value&foo=bar');
     expect(cmd.bodyArg).toBe('ascii');

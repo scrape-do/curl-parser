@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 // if we just import ".", typescript
 // uses the built version of our library. we want jest to use typescript code directly so we directly import module "./index"
 import { parse } from './index';
