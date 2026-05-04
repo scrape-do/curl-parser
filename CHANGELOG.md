@@ -1,5 +1,16 @@
 ## [UNRELEASED]
 
+## 0.4.2
+
+* feat: handle backslashes correctly [related issue](https://github.com/scrape-do/curl-parser/pull/4)
+
+```
+Test spec: preserves escaped double-quotes inside single quotes
+Testing input: "'{"key":"\"value\""}'"
+Old split output: [ "{"key":""value\""}" ]
+New split output: [ "{"key":"\"value\""}" ]
+```
+
 ## 0.4.1
 
 * [fix and feature]: Add support for -L/--location flag as a boolean (flags.location?: boolean) with --no-location negation, correcting prior misparsing as a URL argument.
