@@ -23,8 +23,14 @@ describe('data-raw', () => {
   });
 
   it('should handle --data-raw with stringified json', () => {
-    const raw = JSON.stringify({ foo: "bar", key: JSON.stringify([{ foo: 'bar' }]) })
-    const cmd = parse(`curl --data-raw "${raw}" http://example.com`);
+    const raw = JSON.stringify({
+      foo: 'bar',
+      key: JSON.stringify([{ foo: 'bar' }]),
+    });
+
+    // please note that single quote is used instead of the double quotes.
+    // double quotes allow variable substitution ("$foo" will translated to something like "foobar" or "" if the $foo is not defined)
+    const cmd = parse(`curl --data-raw '${raw}' http://example.com`);
 
     expect(cmd.body).toBe(raw);
     expect(cmd.bodyArg).toBe('raw');

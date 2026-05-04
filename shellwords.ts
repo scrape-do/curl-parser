@@ -21,6 +21,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
  */
+
 const scan = (
   string: string,
   pattern: RegExp,
@@ -55,7 +56,7 @@ export const split = (line: string = '') => {
   let field = '';
   scan(
     line,
-    /\s*(?:([^\s\\\'\"]+)|'((?:[^\'\\]|\\.)*)'|"((?:[^\"\\]|\\.)*)"|(\\.?)|(\S))(\s|$)?/,
+    /\s*(?:([^\s\\\'\"]+)|'([^\']*)'|"((?:[^\"\\]|\\.)*)"|(\\.?)|(\S))(\s|$)?/,
     (match) => {
       const [, word, sq, dq, escape, garbage, separator] = match;
 
@@ -65,12 +66,12 @@ export const split = (line: string = '') => {
 
       if (word) {
         field += word;
+      } else if (sq != null) {
+        field += sq;
       } else {
         let addition: string = '';
 
-        if (sq) {
-          addition = sq;
-        } else if (dq) {
+        if (dq) {
           addition = dq;
         } else if (escape) {
           addition = escape;

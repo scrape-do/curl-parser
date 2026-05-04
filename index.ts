@@ -318,6 +318,7 @@ export function parse(command: string): CurlCommand {
       case 'data-raw':
         result.bodyArg = 'raw';
         result.body = arg;
+
         break;
       case 'data-urlencode': {
         let formatted = arg.replace(/^=/, '');
