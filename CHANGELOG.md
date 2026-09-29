@@ -1,5 +1,9 @@
 ## [UNRELEASED]
 
+## 0.4.4
+
+* dependencies are upgraded
+
 ## 0.4.2
 
 * feat: handle backslashes correctly [related issue](https://github.com/scrape-do/curl-parser/pull/4)
